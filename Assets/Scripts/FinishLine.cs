@@ -1,13 +1,30 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FinishLine : MonoBehaviour
 {
-    void OnTriggerEnter2D(Collider2D collider) {
+
+    float DelayTime = 1f;
+    ParticleSystem particles;
+
+    void Awake()
+    {
+        particles = GetComponentInChildren<ParticleSystem>();
+    }
+    
+    void LoadScene()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
         int layerIndex = LayerMask.NameToLayer("Player");
 
         if (collider.gameObject.layer == layerIndex)
         {
-            Debug.Log("The player jas won");
+            particles.Play();
+            Invoke("LoadScene", DelayTime);
         }
     }
 }

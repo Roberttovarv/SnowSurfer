@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     float rotation = .6f;
     InputAction moveAction;
     Rigidbody2D myRigidBody;
+    ParticleSystem particles;
 
     void Start()
     {
