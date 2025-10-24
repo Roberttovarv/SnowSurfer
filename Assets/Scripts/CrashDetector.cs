@@ -3,12 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class CrashDetector : MonoBehaviour
 {
-    float DelayTime = .3f;
+    float DelayTime = 1f;
+    bool isTouchingFloor;
+    public bool IsTouchingFloor => isTouchingFloor;
+
     ParticleSystem particles;
+    PlayerController playerController;
 
     void Awake()
     {
         particles = GetComponentInChildren<ParticleSystem>();
+        playerController = Object.FindFirstObjectByType<PlayerController>();
     }
 
     void LoadScene()
@@ -21,6 +26,7 @@ public class CrashDetector : MonoBehaviour
 
         if (other.gameObject.layer == layerIndex)
         {
+            playerController.DisableControls();
             Invoke("LoadScene", DelayTime);
         }
     }
@@ -32,6 +38,7 @@ public class CrashDetector : MonoBehaviour
         if (table.gameObject.layer == layerIndex)
         {
             particles.Play();
+            isTouchingFloor = true;
         }
     }
     void OnCollisionExit2D(Collision2D collision)
@@ -41,6 +48,7 @@ public class CrashDetector : MonoBehaviour
         if (collision.gameObject.layer == layerIndex)
         {
             particles.Stop();
+            isTouchingFloor = false;
         }
     }
 }
