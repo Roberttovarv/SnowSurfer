@@ -11,11 +11,14 @@ public class PlayerController : MonoBehaviour
     bool isTouchingFloor;
     bool canControlPlayer = true;
     int flipCount;
+        int boostCounter;
+
+
 
 
     InputAction moveAction;
     Rigidbody2D myRigidBody;
-    ParticleSystem particles;
+    ParticleSystem[] particles;
     Vector2 moveVector;
     SurfaceEffector2D surface;
     CrashDetector crashDetector;
@@ -27,6 +30,8 @@ public class PlayerController : MonoBehaviour
         crashDetector = Object.FindFirstObjectByType<CrashDetector>();
         moveAction = InputSystem.actions.FindAction("Move");
         myRigidBody = GetComponent<Rigidbody2D>();
+        particles = GetComponentsInChildren<ParticleSystem>();
+        boostCounter = 0;
     }
 
     void Update()
@@ -88,5 +93,35 @@ public class PlayerController : MonoBehaviour
             baseSpeed += powerUp.GetValueChange();
             boostSpeed += powerUp.GetValueChange();
         }
+        if (powerUp.GetPowerUpType() == "torque")
+        {
+            rotation += powerUp.GetValueChange();
+            print($"Activating, new value {rotation}");
+        }
+        boostCounter++;
+        particles[0].Stop();
+        particles[1].Play();
+    }
+    public void DeactivatePowerUp(PowerUp powerUp)
+    {
+        if (powerUp.GetPowerUpType() == "LongSpeed")
+        {
+            baseSpeed -= powerUp.GetValueChange();
+            boostSpeed -= powerUp.GetValueChange();
+        }
+        if (powerUp.GetPowerUpType() == "torque")
+        {
+            rotation -= powerUp.GetValueChange();
+            print($"Deactivating, comng to original value {rotation}");
+
+        }
+        boostCounter--;
+        if (boostCounter == 0)
+        {
+            
+        particles[0].Play();
+        particles[1].Stop();
+        }
+
     }
 }
