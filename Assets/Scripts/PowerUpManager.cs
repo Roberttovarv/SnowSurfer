@@ -8,6 +8,10 @@ public class PowerUpManager : MonoBehaviour
     float timeLeft;
     bool picked;
 
+    void Awake()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+    }
 
     void Start()
     {
@@ -37,16 +41,15 @@ public class PowerUpManager : MonoBehaviour
 
     void CountDown()
     {
-                if (sprite.enabled == false)
+        if (sprite.enabled == false)
         {
             if (timeLeft > 0)
             {
                 timeLeft -= Time.deltaTime;
-            if (timeLeft <= 0)
-                    {
+                if (timeLeft <= 0)
+                {
                     player.DeactivatePowerUp(powerUp);
                     picked = false;
-                    print("Deactivated");
                 }
             }
         }

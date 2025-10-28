@@ -11,14 +11,15 @@ public class PlayerController : MonoBehaviour
     bool isTouchingFloor;
     bool canControlPlayer = true;
     int flipCount;
-        int boostCounter;
+    int boostCounter;
 
 
 
 
     InputAction moveAction;
     Rigidbody2D myRigidBody;
-    ParticleSystem[] particles;
+    [SerializeField] ParticleSystem tail;
+    [SerializeField] ParticleSystem boostTail;
     Vector2 moveVector;
     SurfaceEffector2D surface;
     CrashDetector crashDetector;
@@ -30,7 +31,6 @@ public class PlayerController : MonoBehaviour
         crashDetector = Object.FindFirstObjectByType<CrashDetector>();
         moveAction = InputSystem.actions.FindAction("Move");
         myRigidBody = GetComponent<Rigidbody2D>();
-        particles = GetComponentsInChildren<ParticleSystem>();
         boostCounter = 0;
     }
 
@@ -96,11 +96,10 @@ public class PlayerController : MonoBehaviour
         if (powerUp.GetPowerUpType() == "torque")
         {
             rotation += powerUp.GetValueChange();
-            print($"Activating, new value {rotation}");
         }
         boostCounter++;
-        particles[0].Stop();
-        particles[1].Play();
+        tail.Stop();
+        boostTail.Play();
     }
     public void DeactivatePowerUp(PowerUp powerUp)
     {
@@ -112,15 +111,14 @@ public class PlayerController : MonoBehaviour
         if (powerUp.GetPowerUpType() == "torque")
         {
             rotation -= powerUp.GetValueChange();
-            print($"Deactivating, comng to original value {rotation}");
 
         }
         boostCounter--;
         if (boostCounter == 0)
         {
-            
-        particles[0].Play();
-        particles[1].Stop();
+
+            tail.Play();
+            boostTail.Stop();
         }
 
     }

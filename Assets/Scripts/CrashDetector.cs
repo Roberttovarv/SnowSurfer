@@ -14,6 +14,7 @@ public class CrashDetector : MonoBehaviour
     {
         particles = GetComponentInChildren<ParticleSystem>();
         playerController = Object.FindFirstObjectByType<PlayerController>();
+        print("My player is: " + playerController);
     }
 
     void LoadScene()
